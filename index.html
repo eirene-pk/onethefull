@@ -776,16 +776,6 @@
             서울특별시 영등포구 신길로 27
         </p>
 
-        <a
-            href="#"
-            class="button button-blue"
-            id="locationButton"
-            target="_blank"
-            rel="noopener noreferrer"
-        >
-            📍 카카오맵에서 오시는 길 보기
-        </a>
-
         <button
             type="button"
             class="button button-kakao"
@@ -826,6 +816,17 @@
   <!-- 카카오맵 JavaScript SDK -->
   <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=dd7f6cb699e746290a59ebaa0597c5b3&libraries=services&autoload=false"></script>
 
+  <script charset="UTF-8" class="daum_roughmap_loader_script" src="https://ssl.daumcdn.net/dmaps/map_js_init/roughmapLoader.js"></script>
+
+<!-- 3. 실행 스크립트 -->
+<script charset="UTF-8">
+	new daum.roughmap.Lander({
+		"timestamp" : "1725283903449",
+		"key" : "2kirg",
+		// "mapWidth" : "",
+		"mapHeight" : "260"
+	}).render();
+</script>
   <script>
 
     /* =====================================
