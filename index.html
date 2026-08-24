@@ -90,6 +90,24 @@
             height: auto;
         }
 
+        .program-section {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px 16px;
+            background: #f8a6bf;
+        }
+
+        .program-image {
+            display: block;
+            width: 100%;
+            height: auto;
+            max-height: calc(100vh - 48px);
+            object-fit: contain;
+            border-radius: 18px;
+        }
+
         /* =========================
             CONTENT COMMON
         ========================= */
@@ -532,6 +550,13 @@
                     class="poster-image"
                 />
             </div>
+        </section>
+        <section class="program-section">
+        <img
+            src="program.jpeg"
+            alt="원더풀 교육부서 연합 전도축제 부스 및 공연 안내"
+            class="program-image"
+        />
         </section>
 
 
