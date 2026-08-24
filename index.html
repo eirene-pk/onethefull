@@ -412,15 +412,18 @@
             box-shadow: 0 5px 0 var(--blue);
         }
 
-        #map {
+        .map-shell {
             width: 100%;
-            height: 300px;
             margin: 28px 0 22px;
             border: 3px solid var(--blue);
             border-radius: 20px;
             overflow: hidden;
             background: #ffffff;
             box-shadow: 7px 7px 0 var(--blue);
+        }
+
+        .root_daum_roughmap {
+            width: 100% !important;
         }
 
         .map-address {
@@ -770,13 +773,20 @@
             원더풀에서 기다리고 있을게!
         </p>
 
-        <div id="map" aria-label="서울평강교회 카카오맵"></div>
+        <div class="map-shell">
+            <div
+                id="daumRoughmapContainer1725283903449"
+                class="root_daum_roughmap root_daum_roughmap_landing"
+                style="width:100%;"
+                aria-label="서울평강교회 카카오맵"
+            ></div>
+        </div>
 
         <p class="map-address">
             서울특별시 영등포구 신길로 27
         </p>
         <a
-            href="https://map.kakao.com/link/search/서울평강교회"
+            href="https://place.map.kakao.com/9506550"
             class="button button-blue"
             id="locationButton"
             target="_blank"
@@ -822,11 +832,7 @@
     </main>
   <!-- 카카오톡 공유 SDK -->
   <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.8.2/kakao.min.js"></script>
-
-  <!-- 카카오맵 JavaScript SDK -->
-  <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=b10caa4e84b7ea947c2bfff2c150a064&libraries=services&autoload=false"></script>
-
-  <script>
+<script>
 
     /* =====================================
        COUNTDOWN
@@ -947,10 +953,6 @@
     const INVITATION_URL =
       "https://eirene-pk.github.io/onethefull/";
 
-    const CHURCH_NAME = "서울평강교회";
-    const CHURCH_ADDRESS = "서울특별시 영등포구 신길로 27";
-
-
     /* =====================================
        KAKAO SHARE
     ====================================== */
@@ -977,96 +979,21 @@
       });
 
 
-    /* =====================================
-       KAKAO MAP
-    ====================================== */
+  </script>
 
-    function initKakaoMap() {
-      const mapContainer = document.getElementById("map");
+  <!-- 카카오맵 지도 퍼가기(RoughMap): Web API JavaScript 키 불필요 -->
+  <script
+    charset="UTF-8"
+    class="daum_roughmap_loader_script"
+    src="https://ssl.daumcdn.net/dmaps/map_js_init/roughmapLoader.js"
+  ></script>
 
-      if (!window.kakao || !kakao.maps || !kakao.maps.services) {
-        mapContainer.innerHTML =
-          "<p style='padding:30px 15px;text-align:center;'>지도를 불러오지 못했습니다.</p>";
-        return;
-      }
-
-      const geocoder = new kakao.maps.services.Geocoder();
-
-      geocoder.addressSearch(
-        CHURCH_ADDRESS,
-        function(result, status) {
-
-          if (status !== kakao.maps.services.Status.OK) {
-            console.error("서울평강교회 주소 검색 실패", status);
-            mapContainer.innerHTML =
-              "<p style='padding:30px 15px;text-align:center;'>교회 위치를 찾지 못했습니다.</p>";
-            return;
-          }
-
-          const latitude = Number(result[0].y);
-          const longitude = Number(result[0].x);
-
-          const position =
-            new kakao.maps.LatLng(latitude, longitude);
-
-          const map =
-            new kakao.maps.Map(
-              mapContainer,
-              {
-                center: position,
-                level: 3
-              }
-            );
-
-          const marker =
-            new kakao.maps.Marker({
-              map: map,
-              position: position
-            });
-
-          const infoWindow =
-            new kakao.maps.InfoWindow({
-              content: `
-                <div style="
-                  width:150px;
-                  padding:8px 5px;
-                  text-align:center;
-                  font-size:13px;
-                  font-weight:700;
-                  white-space:nowrap;
-                ">
-                  ${CHURCH_NAME}
-                </div>
-              `
-            });
-
-          infoWindow.open(map, marker);
-
-          // 카카오맵 길찾기 링크
-          const locationButton =
-            document.getElementById("locationButton");
-
-          if (locationButton) {
-            locationButton.href =
-              `https://map.kakao.com/link/to/${encodeURIComponent(CHURCH_NAME)},${latitude},${longitude}`;
-          }
-        }
-      );
-    }
-
-    if (window.kakao && kakao.maps) {
-      kakao.maps.load(initKakaoMap);
-    } else {
-      const mapContainer = document.getElementById("map");
-
-      if (mapContainer) {
-        mapContainer.innerHTML =
-          "<p style='padding:30px 15px;text-align:center;line-height:1.7;'>카카오맵 SDK를 불러오지 못했습니다.<br>카카오맵 사용 설정과 JavaScript SDK 도메인을 확인해 주세요.</p>";
-      }
-
-      console.error("Kakao Maps SDK 로드 실패");
-    }
-
+  <script charset="UTF-8">
+    new daum.roughmap.Lander({
+      "timestamp": "1725283903449",
+      "key": "2kirg",
+      "mapHeight": "300"
+    }).render();
   </script>
 
 </body>
