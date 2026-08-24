@@ -775,13 +775,22 @@
         <p class="map-address">
             서울특별시 영등포구 신길로 27
         </p>
+        <a
+            href="https://map.kakao.com/link/search/서울평강교회"
+            class="button button-blue"
+            id="locationButton"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            📍 카카오맵에서 오시는 길 보기
+        </a>
 
         <button
             type="button"
             class="button button-kakao"
             id="shareButton"
         >
-            💬 카카오톡 공유 링크 복사하기
+            💬 카카오톡으로 초대장 보내기
         </button>
 
         </section>
@@ -811,6 +820,12 @@
     </footer>
 
     </main>
+  <!-- 카카오톡 공유 SDK -->
+  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.8.2/kakao.min.js"></script>
+
+  <!-- 카카오맵 JavaScript SDK -->
+  <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=dd7f6cb699e746290a59ebaa0597c5b3&libraries=services&autoload=false"></script>
+
   <script>
 
     /* =====================================
@@ -937,49 +952,28 @@
 
 
     /* =====================================
-       LINK COPY
+       KAKAO SHARE
     ====================================== */
+
+    const KAKAO_JAVASCRIPT_KEY =
+      "dd7f6cb699e746290a59ebaa0597c5b3";
+
+    if (window.Kakao && !Kakao.isInitialized()) {
+      Kakao.init(KAKAO_JAVASCRIPT_KEY);
+    }
 
     document
       .getElementById("shareButton")
-      .addEventListener("click", async () => {
+      .addEventListener("click", () => {
 
-        try {
-          await navigator.clipboard.writeText(INVITATION_URL);
-
-          alert(
-            "초대장 링크가 복사되었습니다 💌\n카카오톡에 붙여넣어 주세요!"
-          );
-
-        } catch (error) {
-
-          // clipboard API를 사용할 수 없는 브라우저용 fallback
-          const textarea = document.createElement("textarea");
-
-          textarea.value = INVITATION_URL;
-          textarea.style.position = "fixed";
-          textarea.style.opacity = "0";
-
-          document.body.appendChild(textarea);
-
-          textarea.focus();
-          textarea.select();
-
-          const copied = document.execCommand("copy");
-
-          document.body.removeChild(textarea);
-
-          if (copied) {
-            alert(
-              "초대장 링크가 복사되었습니다 💌\n카카오톡에 붙여넣어 주세요!"
-            );
-          } else {
-            prompt(
-              "아래 링크를 복사해 주세요.",
-              INVITATION_URL
-            );
-          }
+        if (!window.Kakao || !Kakao.isInitialized()) {
+          alert("카카오톡 공유 기능을 불러오지 못했습니다.");
+          return;
         }
+
+        Kakao.Share.sendScrap({
+          requestUrl: INVITATION_URL
+        });
       });
 
 
@@ -1049,10 +1043,13 @@
           infoWindow.open(map, marker);
 
           // 카카오맵 길찾기 링크
-          document
-            .getElementById("locationButton")
-            .href =
+          const locationButton =
+            document.getElementById("locationButton");
+
+          if (locationButton) {
+            locationButton.href =
               `https://map.kakao.com/link/to/${encodeURIComponent(CHURCH_NAME)},${latitude},${longitude}`;
+          }
         }
       );
     }
@@ -1064,7 +1061,7 @@
 
       if (mapContainer) {
         mapContainer.innerHTML =
-          "<p style='padding:30px 15px;text-align:center;line-height:1.7;'>카카오맵을 불러오지 못했습니다.<br>카카오 디벨로퍼스의 JavaScript SDK 도메인 설정을 확인해 주세요.</p>";
+          "<p style='padding:30px 15px;text-align:center;line-height:1.7;'>카카오맵 SDK를 불러오지 못했습니다.<br>카카오맵 사용 설정과 JavaScript SDK 도메인을 확인해 주세요.</p>";
       }
 
       console.error("Kakao Maps SDK 로드 실패");
